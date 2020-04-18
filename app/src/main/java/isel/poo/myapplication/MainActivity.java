@@ -7,9 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String FILENAME = "counter.txt";
     Button inc, dec, reset, load, save;
     TextView counter;
 
@@ -33,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         reset = new Button(this);
         reset.setText("Reset");
 
+        load = new Button(this);
+        load.setText("Load");
+
+        save = new Button(this);
+        save.setText("Save");
+
         view = new CounterView(this);
         view.setListener(new CounterView.Listener() {
             @Override
@@ -50,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         buttons.addView(inc);
         buttons.addView(dec);
         buttons.addView(reset);
+        buttons.addView(load);
+        buttons.addView(save);
         main.addView(buttons);
         main.addView(counter);
         main.addView(view);
@@ -63,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 movedCircle(getValue());
             }
         });
-
         dec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 movedCircle(getValue());
             }
         });
-
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +91,40 @@ public class MainActivity extends AppCompatActivity {
                 movedCircle(0);
             }
         });
+        load.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                load();
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+    }
 
+    private void load(){
+        try (Scanner in = new Scanner(openFileInput(FILENAME))){
+            clear();
+            add(in.nextInt());
+            view.setValue(in.nextInt());
+        }catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void save() {
+        try (PrintWriter pw = new PrintWriter(
+                new OutputStreamWriter(openFileOutput(FILENAME,MODE_PRIVATE))
+        )) {
+            pw.println(getValue());
+            pw.println(view.getCounterValue());
+        } catch (Exception e) {
+            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
+        }
     }
 
     private void movedCircle(int v) {

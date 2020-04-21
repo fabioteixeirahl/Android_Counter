@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void load(){
-        try (Scanner in = new Scanner(openFileInput(FILENAME))){
+    private void load() {
+        try (Scanner in = new Scanner(openFileInput(FILENAME))) {
             clear();
             add(in.nextInt());
             view.setValue(in.nextInt());

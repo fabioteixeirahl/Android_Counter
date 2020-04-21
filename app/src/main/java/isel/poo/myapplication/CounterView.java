@@ -2,11 +2,10 @@ package isel.poo.myapplication;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
+
 
 class CounterView extends View {
     private final int FACTOR = -10;
